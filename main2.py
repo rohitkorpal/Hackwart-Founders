@@ -7,10 +7,9 @@ import torch
 from datetime import datetime
 
 # STEP 1: Import required modules for safe loading
-import torch.serialization
 from torch.serialization import add_safe_globals
 from ultralytics.nn.tasks import DetectionModel
-add_safe_globals([DetectionModel])  # ✅ Important: before model load
+add_safe_globals([DetectionModel])  # ✅ Allow DetectionModel
 
 # STEP 2: Download YOLO model if not present
 if not os.path.exists("yolov8m.pt"):
@@ -29,11 +28,10 @@ vehicle_ids = [2, 3, 5, 7]  # car, motorcycle, bus, truck
 # Streamlit Page Config
 st.set_page_config(page_title="Hogwarts Flow Master", layout="wide")
 
-# Magical Sparkle Effect + Fonts + CSS
+# UI Styles
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
-
         .stApp {
             background-image: url(https://i.redd.it/esoi3wkswf6c1.png);
             background-size: cover;
@@ -41,20 +39,17 @@ st.markdown("""
             font-family: 'MedievalSharp', cursive;
             color: #f5f2d0;
         }
-
         .sparkles::before {
-            content: '✨';
+            content: '\2728';
             animation: sparkle 1.5s infinite;
             font-size: 20px;
             margin-right: 5px;
         }
-
         @keyframes sparkle {
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
         }
-
         .header-box {
             background-color: rgba(0, 0, 0, 0.75);
             padding: 30px;
@@ -64,7 +59,6 @@ st.markdown("""
             color: #f5f2d0;
             text-align: center;
         }
-
         .lane-box {
             background: linear-gradient(135deg, #1a1a40 0%, #000000 100%);
             border: 2px solid #f5d142;
@@ -75,12 +69,10 @@ st.markdown("""
             padding: 16px;
             transition: all 0.3s ease-in-out;
         }
-
         .lane-box:hover {
             transform: scale(1.05);
             box-shadow: 0 0 30px #ffe082, 0 0 40px #ffd740;
         }
-
         .section-title {
             font-size: 36px;
             font-weight: bold;
@@ -89,7 +81,6 @@ st.markdown("""
             margin-top: 40px;
             text-align: center;
         }
-
         .footer {
             position: fixed;
             bottom: 0;
@@ -101,7 +92,6 @@ st.markdown("""
             padding: 14px;
             border-top: 1px solid #d4af37;
         }
-
         .stButton>button {
             background-color: #5d3a00;
             color: #f5f2d0;
@@ -113,7 +103,6 @@ st.markdown("""
             box-shadow: 0 0 12px #d4af37;
             transition: all 0.3s ease;
         }
-
         .stButton>button:hover {
             background-color: #7a5000;
             box-shadow: 0 0 24px #ffcc00;
@@ -127,9 +116,9 @@ with st.container():
     current_time = datetime.now().strftime("%I:%M:%S %p")
     st.markdown(f"""
         <div class='header-box'>
-            <h1 class='sparkles'>✨ Hogwarts Flow Master ✨</h1>
-            <p style='margin:0;font-size:18px;'>Real-time traffic control by spellcraft and logic</p>
-            <p style='font-size:16px;margin-top:10px;'>🕰️ Current Time: <b>{current_time}</b></p>
+            <h1 class='sparkles'>\2728 Hogwarts Flow Master \2728</h1>
+            <p>Real-time traffic control by spellcraft and logic</p>
+            <p>\u23F0 Current Time: <b>{current_time}</b></p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -138,22 +127,20 @@ lane_names = ["North", "East", "South", "West"]
 uploaded_videos = [None] * 4
 lane_colors = ["#B71C1C", "#F57F17", "#1B5E20", "#0D47A1"]
 
-st.markdown("<div class='section-title'>🧙 Present Your Lane Observations</div>", unsafe_allow_html=True)
-
+st.markdown("<div class='section-title'>\ud83e\uddd9 Present Your Lane Observations</div>", unsafe_allow_html=True)
 cols = st.columns(4)
 for i in range(4):
     with cols[i]:
-        st.markdown(f"<div style='background-color:{lane_colors[i]};padding:15px;border-radius:10px;text-align:center;'>" \
+        st.markdown(f"<div style='background-color:{lane_colors[i]};padding:15px;border-radius:10px;text-align:center;'>"
                     f"<b style='color:white'>{lane_names[i]} Lane</b>", unsafe_allow_html=True)
         uploaded_videos[i] = st.file_uploader("", type=["mp4", "avi", "mov"], key=f"lane{i+1}")
 
-# Magic Button
-if st.button("🔮 Cast Signal Optimizing Spell"):
+# Analyze Video and Display Results
+if st.button("\ud83d\udd2e Cast Signal Optimizing Spell"):
     if None in uploaded_videos:
-        st.warning("⚠️ Please upload all 4 lane videos to proceed with the spell.")
+        st.warning("\u26a0\ufe0f Please upload all 4 lane videos to proceed with the spell.")
     else:
-        st.info("✨ Enchanting lanes... please wait while we divine the green light.")
-
+        st.info("\u2728 Enchanting lanes... please wait while we divine the green light.")
         temp_paths = []
         for file in uploaded_videos:
             with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
@@ -183,11 +170,11 @@ if st.button("🔮 Cast Signal Optimizing Spell"):
 
         green_index = counts.index(max(counts))
 
-        st.markdown("<div class='section-title'>🧙 Green Light Chosen by Magic!</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-title'>\ud83e\uddd9 Green Light Chosen by Magic!</div>", unsafe_allow_html=True)
         result_cols = st.columns(4)
         for i in range(4):
             with result_cols[i]:
-                signal_status = "🟢 GO" if i == green_index else "🔴 STOP"
+                signal_status = "\ud83d\udfe2 GO" if i == green_index else "\ud83d\udd34 STOP"
                 st.markdown(f"""
                     <div class='lane-box'>
                         <b>{lane_names[i]} Lane</b><br>
@@ -198,6 +185,6 @@ if st.button("🔮 Cast Signal Optimizing Spell"):
 
 # Footer
 st.markdown(
-    "<div class='footer'>Made by <b>Hackwarts Founders 🧙‍♂️</b> | Triwizardathon 2025</div>",
+    "<div class='footer'>Made by <b>Hackwarts Founders \ud83e\uddd9\u200d\u2642\ufe0f</b> | Triwizardathon 2025</div>",
     unsafe_allow_html=True
 )
