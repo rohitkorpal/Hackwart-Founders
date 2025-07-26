@@ -1,9 +1,23 @@
 import streamlit as st
 import cv2
 import tempfile
-from ultralytics import YOLO
 from datetime import datetime
 import numpy as np
+import torch.serialization
+from torch.serialization import add_safe_globals
+from ultralytics.nn.tasks import DetectionModel
+from ultralytics import YOLO
+import os
+from ultralytics.utils.downloads import attempt_download_asset
+
+# Check if model file exists; if not, download it
+if not os.path.exists("yolov8m.pt"):
+    attempt_download_asset("yolov8m.pt")
+
+
+# 👇 Allow PyTorch to load the custom YOLO class safely
+add_safe_globals([DetectionModel])
+
 
 # Load YOLO model
 yolo_model = YOLO("yolov8m.pt")
