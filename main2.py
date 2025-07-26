@@ -1,28 +1,28 @@
 import streamlit as st
 import cv2
 import tempfile
-from datetime import datetime
 import numpy as np
+import os
+import torch
+from datetime import datetime
+
+# STEP 1: Import required modules for safe loading
 import torch.serialization
 from torch.serialization import add_safe_globals
 from ultralytics.nn.tasks import DetectionModel
-from ultralytics import YOLO
-import os
-import torch
+add_safe_globals([DetectionModel])  # ✅ Important: before model load
 
+# STEP 2: Download YOLO model if not present
 if not os.path.exists("yolov8m.pt"):
     torch.hub.download_url_to_file(
         "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8m.pt",
         "yolov8m.pt"
     )
 
+# STEP 3: Import YOLO *after* safe load & download
+from ultralytics import YOLO
 
-
-# 👇 Allow PyTorch to load the custom YOLO class safely
-add_safe_globals([DetectionModel])
-
-
-# Load YOLO model
+# STEP 4: Load the model
 yolo_model = YOLO("yolov8m.pt")
 vehicle_ids = [2, 3, 5, 7]  # car, motorcycle, bus, truck
 
