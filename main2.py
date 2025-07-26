@@ -8,11 +8,14 @@ from torch.serialization import add_safe_globals
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics import YOLO
 import os
-from ultralytics.utils.downloads import attempt_download_asset
+import torch
 
-# Check if model file exists; if not, download it
 if not os.path.exists("yolov8m.pt"):
-    attempt_download_asset("yolov8m.pt")
+    torch.hub.download_url_to_file(
+        "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8m.pt",
+        "yolov8m.pt"
+    )
+
 
 
 # 👇 Allow PyTorch to load the custom YOLO class safely
