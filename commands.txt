@@ -1,0 +1,2 @@
+cmd 1- streamlit run "C:\Users\rohit\Downloads\Hackwart-Founders-main (1)\main2.py"
+cmd 2- python traffic_controller_backend.py "C:\Users\rohit\Downloads\Hackwart-Founders-main (1)\Hackwart-Founders-main\lane1.mp4" "C:\Users\rohit\Downloads\Hackwart-Founders-main (1)\Hackwart-Founders-main\lane2.mp4" "C:\Users\rohit\Downloads\Hackwart-Founders-main (1)\Hackwart-Founders-main\lane3.mp4" "C:\Users\rohit\Downloads\Hackwart-Founders-main (1)\Hackwart-Founders-main\sample_video.mp4"
